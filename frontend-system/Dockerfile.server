@@ -1,0 +1,15 @@
+FROM python:3.7
+
+COPY frontend-server frontend-server
+COPY frontend/protos frontend/protos
+
+WORKDIR frontend-server
+RUN pip3 install --upgrade pip
+RUN python3 -m pip install --upgrade setuptools
+RUN pip3 install -r requirements.txt
+RUN chmod +x ./gen.sh
+RUN ./gen.sh
+
+EXPOSE 5000 
+
+ENTRYPOINT ["python3", "./app.py", "host.docker.internal:9095"]
